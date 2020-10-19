@@ -3,6 +3,7 @@ import time
 import pandas as pd
 from sklearn.preprocessing import MinMaxScaler
 from sklearn.ensemble import GradientBoostingRegressor
+from sklearn.metrics import mean_squared_error
 
 from pso2.optimizer import PSO
 
@@ -30,10 +31,13 @@ if __name__ == '__main__':
     model = GradientBoostingRegressor()
 
     # Boundaries
-    boundaries = [
-        (10, 200),  # n_estimators
-        (3, 15),    # max_depth
-    ]
+    boundaries = {
+        'n_estimators': (10, 200),
+        'max_depth': (3, 15)
+    }
+
+    # Function to minimize (or maximize)
+    func = mean_squared_error
 
     # PSO params
     c1 = 1.0
@@ -46,12 +50,18 @@ if __name__ == '__main__':
     pso_params = {
         'model': model,
         'boundaries': boundaries,
+        'func': func,
+        'X_train': X_train,
+        'X_test': X_test,
+        'y_train': y_train,
+        'y_test': y_test,
         'c1': c1,
         'c2': c2,
         'w': w,
         'n_pop': n_pop,
         'max_iter': max_iter
     }
+
 
     opt = PSO(**pso_params)
 
