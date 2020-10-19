@@ -1,5 +1,5 @@
 import numpy as np
-from sklearn.ensemble import GradientBoostingRegressor
+from pso2.models import set_model
 
 
 class Particle:
@@ -27,20 +27,16 @@ class PSO:
         self.err_best_g = -1        # Best error for group
         self.pos_gest_g = []        # Best position for group
 
+        # Machine Learning model
+        self.model = set_model(params.get('model'), params.get('boundaries'))
+
         # Establish the swarm
         self.swarm = []
         for i in range(0, self.n_pop):
-            p = self.generate_params_model()
+            p = self.model.generate_params_model()
+            print(p)
             particle = Particle(p, i)
             self.swarm.append(particle)
 
-    def generate_params_model(self):
-        p = []
-
-        for i in self.boundaries.keys():
-            low = self.boundaries[i][0]
-            high = self.boundaries[i][1] + 1
-            randint = np.random.randint(low, high)
-            p.append(randint)
-
-        return p
+    def optimize(self):
+        pass
