@@ -11,15 +11,8 @@ class Particle:
         self.err_best_i = -1            # Best error individual
         self.err_i = -1                 # Error individual
 
-        # Generating initial velocities randomly
-        for i in range(0, num_dimensions):
-            self.velocity_i.append(np.random.rand(1)[0])
-
-        def print_particle(self):
-            print('particle_{}: {}'.format(self.identifier, self.position_i))
-
-        def print_loss(self):
-            print('loss_{}: {}'.format(self.identifier, self.err_i))
+    def print_particle(self):
+        print('particle_{}: {}'.format(self.identifier, self.position_i))
 
 
 class PSO:
@@ -30,12 +23,24 @@ class PSO:
         self.max_iter = params.get('max_iter')
         self.n_pop = params.get('n_pop')
         self.boundaries = params.get('boundaries')
-        self.model = params.get('model')
 
-        print(self.c1)
-        print(self.c2)
-        print(self.w)
-        print(self.max_iter)
-        print(self.n_pop)
-        print(self.boundaries)
-        print(self.model)
+        self.err_best_g = -1        # Best error for group
+        self.pos_gest_g = []        # Best position for group
+
+        # Establish the swarm
+        self.swarm = []
+        for i in range(0, self.n_pop):
+            p = self.generate_params_model()
+            particle = Particle(p, i)
+            self.swarm.append(particle)
+
+    def generate_params_model(self):
+        p = []
+
+        for i in self.boundaries.keys():
+            low = self.boundaries[i][0]
+            high = self.boundaries[i][1] + 1
+            randint = np.random.randint(low, high)
+            p.append(randint)
+
+        return p
