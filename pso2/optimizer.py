@@ -32,10 +32,13 @@ class PSO:
 
         # Establish the swarm
         self.swarm = []
+        
         for i in range(0, self.n_pop):
             p = self.model.generate_params_model()
-            print(p)
+
             particle = Particle(p, i)
+            particle.print_particle()
+
             self.swarm.append(particle)
 
     def optimize(self):
