@@ -23,6 +23,9 @@ class Particle:
     def print_loss(self):
         print('loss_{}: {}'.format(self.identifier, self.err_i))
 
+    def evaluate(self, model):
+        model.fit(self.position_i)
+
 
 class PSO:
     def __init__(self, **params):
@@ -32,25 +35,36 @@ class PSO:
         self.max_iter = params.get('max_iter')
         self.n_pop = params.get('n_pop')
         self.boundaries = params.get('boundaries')
+        self.loss_func = params.get('loss_func')
 
         self.err_best_g = -1        # Best error for group
         self.pos_gest_g = []        # Best position for group
 
         # Machine Learning model
-        self.model = set_model(params.get('model'), params.get('boundaries'))
+        self.model = set_model(
+            m=params.get('model'),
+            params=params.get('boundaries'),
+            X_train=params.get('X_train'),
+            X_test=params.get('X_test'),
+            y_train=params.get('y_train'),
+            y_test=params.get('y_test'),
+            loss_func=params.get('loss_func')
+        )
 
         # Establish the swarm
         self.swarm = []
-
         for i in range(0, self.n_pop):
             p = self.model.generate_params_model()
-
             particle = Particle(p, i)
-            particle.print_particle()
-            print(particle.velocity_i)
-            print()
-
             self.swarm.append(particle)
 
     def optimize(self):
-        pass
+        i = 0
+
+        # Begin optimization loop
+        while i < self.max_iter:
+            # Cycle through particles in swarm and evaluate fitness
+            for j in range(0, self.n_pop):
+                self.swarm[j].evaluate(self.model)
+
+            i += 1

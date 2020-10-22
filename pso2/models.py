@@ -3,9 +3,18 @@ from sklearn.ensemble import GradientBoostingRegressor
 
 
 class GBR:
-    def __init__(self, params):
+    def __init__(self, params, X_train, X_test, y_train, y_test, loss_func):
         self.params = params
-        print(self.params)
+        self.X_train = X_train
+        self.X_test = X_test
+        self.y_train = y_train
+        self.y_test = y_test
+        self.loss_func = loss_func
+
+        print(self.X_train.shape)
+        print(self.X_test.shape)
+        print(self.y_train.shape)
+        print(self.y_test.shape)
 
     def get_params(self, key, value):
         low = value[0]
@@ -27,9 +36,17 @@ class GBR:
 
         return p
 
+    def fit(self, params):
+        params = dict(zip(self.params.keys(), params))
+        model = GradientBoostingRegressor(**params)
+        model.fit(self.X_train, self.y_train.values.ravel())
+        y_pred = model.predict(self.X_test)
+        loss = self.loss_func(self.y_test, y_pred)
+        print(loss)
 
-def set_model(m, params):
+
+def set_model(m, params, X_train, X_test, y_train, y_test, loss_func):
     if isinstance(m, GradientBoostingRegressor):
-        model = GBR(params)
+        model = GBR(params, X_train, X_test, y_train, y_test, loss_func)
 
     return model

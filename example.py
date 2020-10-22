@@ -37,20 +37,20 @@ if __name__ == '__main__':
     }
 
     # Function to minimize (or maximize)
-    func = mean_squared_error
+    loss_func = mean_squared_error
 
     # PSO params
     c1 = 1.0
     c2 = 2.0
     w = 0.5
     n_pop = 10
-    max_iter = 2
+    max_iter = 1
 
     # Compress all parameters into a dict
     pso_params = {
         'model': model,
         'boundaries': boundaries,
-        'func': func,
+        'loss_func': loss_func,
         'X_train': X_train,
         'X_test': X_test,
         'y_train': y_train,
@@ -62,8 +62,8 @@ if __name__ == '__main__':
         'max_iter': max_iter
     }
 
-
     opt = PSO(**pso_params)
+    opt.optimize()
 
     end = time.time()
     print('total time: {:.2f}'.format(end - init))
