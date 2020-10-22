@@ -1,3 +1,4 @@
+import copy
 import numpy as np
 from pso2.models import set_model
 
@@ -23,8 +24,14 @@ class Particle:
     def print_loss(self):
         print('loss_{}: {}'.format(self.identifier, self.err_i))
 
+    # Evaluate current fitness
     def evaluate(self, model):
-        model.fit(self.position_i)
+        self.err_i = model.fit(self.position_i)
+
+        # Check to see if the current position is an individual best
+        if self.err_i < self.err_best_i or self.err_best_i == -1:
+            self.pos_best_i = copy.deepcopy(self.position_i)
+            self.err_best_i = self.err_i
 
 
 class PSO:
@@ -66,5 +73,12 @@ class PSO:
             # Cycle through particles in swarm and evaluate fitness
             for j in range(0, self.n_pop):
                 self.swarm[j].evaluate(self.model)
+                self.swarm[j].print_loss()
+                self.swarm[j].print_particle()
+
+                # Determine if current particle is the best (globally)
+                if self.swarm[j].err_i < self.err_best_g or self.err_best_g == -1:
+                    self.pos_gest_g = copy.deepcopy(self.swarm[j].position_i)
+                    self.err_best_g = self.swarm[j].err_i
 
             i += 1
