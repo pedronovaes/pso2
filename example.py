@@ -29,7 +29,8 @@ if __name__ == '__main__':
     # Boundaries
     boundaries = {
         'n_estimators': (10, 200),
-        'max_depth': (3, 15)
+        'max_depth': (3, 15),
+        'learning_rate': (0.001, 0.1)
     }
 
     # Function to minimize (or maximize)
@@ -39,8 +40,8 @@ if __name__ == '__main__':
     c1 = 1.0
     c2 = 2.0
     w = 0.5
-    n_pop = 5
-    max_iter = 2
+    n_pop = 10
+    max_iter = 10
 
     # Compress all parameters into a dict
     pso_params = {
@@ -56,7 +57,7 @@ if __name__ == '__main__':
         'w': w,
         'n_pop': n_pop,
         'max_iter': max_iter,
-        'verbose': 0,
+        'verbose': 1,
     }
 
     opt = PSO(**pso_params)

@@ -15,6 +15,8 @@ class GBR:
         types = {
             'n_estimators': np.int64,
             'max_depth': np.int64,
+            'learning_rate': np.float64,
+            'tol': np.float64,
         }
 
         return types[param]
@@ -26,6 +28,8 @@ class GBR:
         params = {
             'n_estimators': np.random.randint(low, high + 1),
             'max_depth': np.random.randint(low, high + 1),
+            'learning_rate': np.random.uniform(low, high),
+            'tol': np.random.uniform(low, high),
         }
 
         return params[key]
