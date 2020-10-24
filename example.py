@@ -1,5 +1,3 @@
-import time
-
 import pandas as pd
 from sklearn.preprocessing import MinMaxScaler
 from sklearn.ensemble import GradientBoostingRegressor
@@ -22,8 +20,6 @@ def load_datasets():
 
 
 if __name__ == '__main__':
-    init = time.time()
-
     # Load and dataprep
     X_train, X_test, y_train, y_test = load_datasets()
 
@@ -43,8 +39,8 @@ if __name__ == '__main__':
     c1 = 1.0
     c2 = 2.0
     w = 0.5
-    n_pop = 10
-    max_iter = 1
+    n_pop = 5
+    max_iter = 2
 
     # Compress all parameters into a dict
     pso_params = {
@@ -59,11 +55,10 @@ if __name__ == '__main__':
         'c2': c2,
         'w': w,
         'n_pop': n_pop,
-        'max_iter': max_iter
+        'max_iter': max_iter,
+        'verbose': 0,
     }
 
     opt = PSO(**pso_params)
     opt.optimize()
-
-    end = time.time()
-    print('total time: {:.2f}'.format(end - init))
+    print(opt.best_params_)

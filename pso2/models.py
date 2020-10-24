@@ -11,6 +11,14 @@ class GBR:
         self.y_test = y_test
         self.loss_func = loss_func
 
+    def get_types(self, param):
+        types = {
+            'n_estimators': np.int64,
+            'max_depth': np.int64,
+        }
+
+        return types[param]
+
     def get_params(self, key, value):
         low = value[0]
         high = value[1]
@@ -32,9 +40,13 @@ class GBR:
         return p
 
     def fit(self, params):
-        params = dict(zip(self.params.keys(), params))
+        # params = dict(zip(self.params.keys(), params))
+        params_dict = {}
 
-        model = GradientBoostingRegressor(**params)
+        for i, key in enumerate(self.params.keys()):
+            params_dict[key] = self.get_types(key)(params[i])
+
+        model = GradientBoostingRegressor(**params_dict)
         model.fit(self.X_train, self.y_train.values.ravel())
 
         y_pred = model.predict(self.X_test)

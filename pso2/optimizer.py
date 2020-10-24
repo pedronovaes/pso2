@@ -1,5 +1,8 @@
+import time
 import copy
+
 import numpy as np
+
 from pso2.models import set_model
 
 
@@ -33,6 +36,36 @@ class Particle:
             self.pos_best_i = copy.deepcopy(self.position_i)
             self.err_best_i = self.err_i
 
+    # Update new particle velocity
+    def update_velocity(self, pos_best_g, c1, c2, w):
+        """
+        w: Constant inertia weight (how much to weigh the previous velocity)
+        c1: Cognitive constant
+        c2: Social constant
+        """
+
+        for i in range(0, self.num_dimensions):
+            r1 = np.random.rand(1)[0]
+            r2 = np.random.rand(1)[0]
+
+            cognitive_vel = c1 * r1 * (self.pos_best_i[i] - self.position_i[i])
+            social_vel = c2 * r2 * (pos_best_g[i] - self.position_i[i])
+
+            self.velocity_i[i] = w * self.velocity_i[i] + cognitive_vel + social_vel
+
+    # Update the particle position based off new velocity updates
+    def update_position(self, boundaries):
+        for i in range(0, self.num_dimensions):
+            self.position_i[i] = self.position_i[i] + self.velocity_i[i]
+
+            # Adjust maximum position if necessary
+            if self.position_i[i] > boundaries[i][1]:
+                self.position_i[i] = boundaries[i][1]
+
+            # Adjsut minimum position if necessary
+            if self.position_i[i] < boundaries[i][0]:
+                self.position_i[i] = boundaries[i][0]
+
 
 class PSO:
     def __init__(self, **params):
@@ -43,9 +76,11 @@ class PSO:
         self.n_pop = params.get('n_pop')
         self.boundaries = params.get('boundaries')
         self.loss_func = params.get('loss_func')
+        self.verbose = params.get('verbose')
 
         self.err_best_g = -1        # Best error for group
-        self.pos_gest_g = []        # Best position for group
+        self.pos_best_g = []        # Best position for group
+        self.best_params_ = {}
 
         # Machine Learning model
         self.model = set_model(
@@ -66,19 +101,47 @@ class PSO:
             self.swarm.append(particle)
 
     def optimize(self):
+        init = time.time()
+
         i = 0
 
         # Begin optimization loop
         while i < self.max_iter:
+            if self.verbose:
+                print('iter_{}'.format(i))
+
             # Cycle through particles in swarm and evaluate fitness
             for j in range(0, self.n_pop):
                 self.swarm[j].evaluate(self.model)
-                self.swarm[j].print_loss()
-                self.swarm[j].print_particle()
+                # self.swarm[j].print_loss()
+                # self.swarm[j].print_particle()
 
                 # Determine if current particle is the best (globally)
                 if self.swarm[j].err_i < self.err_best_g or self.err_best_g == -1:
-                    self.pos_gest_g = copy.deepcopy(self.swarm[j].position_i)
+                    self.pos_best_g = copy.deepcopy(self.swarm[j].position_i)
                     self.err_best_g = self.swarm[j].err_i
 
+            # Cycle through swarm and update velocities and positions
+            for j in range(0, self.n_pop):
+                self.swarm[j].update_velocity(self.pos_best_g, self.c1, self.c2, self.w)
+                self.swarm[j].update_position(list(self.boundaries.values()))
+
             i += 1
+
+            if self.verbose:
+                print('best loss: {}'.format(self.err_best_g))
+
+        end = time.time()
+
+        if self.verbose:
+            print('total time: {:.2f}s'.format(end - init))
+
+        self.best_params_ = self.format_output()
+
+    def format_output(self):
+        output = {}
+
+        for i, key in enumerate(self.boundaries.keys()):
+            output[key] = self.model.get_types(key)(self.pos_best_g[i])
+
+        return output
