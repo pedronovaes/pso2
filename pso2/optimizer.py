@@ -113,8 +113,10 @@ class PSO:
             # Cycle through particles in swarm and evaluate fitness
             for j in range(0, self.n_pop):
                 self.swarm[j].evaluate(self.model)
-                # self.swarm[j].print_loss()
-                # self.swarm[j].print_particle()
+
+                if self.verbose == 2:
+                    self.swarm[j].print_loss()
+                    self.swarm[j].print_particle()
 
                 # Determine if current particle is the best (globally)
                 if self.swarm[j].err_i < self.err_best_g or self.err_best_g == -1:
@@ -126,10 +128,10 @@ class PSO:
                 self.swarm[j].update_velocity(self.pos_best_g, self.c1, self.c2, self.w)
                 self.swarm[j].update_position(list(self.boundaries.values()))
 
-            i += 1
-
             if self.verbose:
                 print('best loss: {}'.format(self.err_best_g))
+
+            i += 1
 
         end = time.time()
 
