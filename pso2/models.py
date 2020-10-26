@@ -2,7 +2,8 @@ import numpy as np
 from sklearn.ensemble import GradientBoostingRegressor
 
 
-class GBR:
+# Base class of models
+class Model:
     def __init__(self, params, X_train, X_test, y_train, y_test, loss_func):
         self.params = params
         self.X_train = X_train
@@ -11,6 +12,26 @@ class GBR:
         self.y_test = y_test
         self.loss_func = loss_func
 
+    def get_types(self, param):
+        pass
+
+    def get_params(self, key, value):
+        pass
+
+    def generate_params_model(self):
+        p = []
+
+        for i in self.params.keys():
+            num = self.get_params(i, self.params[i])
+            p.append(num)
+
+        return p
+
+    def fit(self, params):
+        pass
+
+
+class GBR(Model):
     def get_types(self, param):
         types = {
             'n_estimators': np.int64,
@@ -33,15 +54,6 @@ class GBR:
         }
 
         return params[key]
-
-    def generate_params_model(self):
-        p = []
-
-        for i in self.params.keys():
-            num = self.get_params(i, self.params[i])
-            p.append(num)
-
-        return p
 
     def fit(self, params):
         # params = dict(zip(self.params.keys(), params))

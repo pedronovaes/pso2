@@ -4,15 +4,15 @@ Particle Swarm Optimization Optimizer (pso2) is a tool that uses PSO method as h
 
 ### what is Particle Swarm Optimization
 
-PSO is a biologically inspired computational method that optimizes a problem by iteratively trying to improve a candidate solution with regard to a given measure of quality. It solves a problem by having a population of candidate solutions (particles) and moving these particles around in the search-space according to simple mathematical formulas over the particle's position and velocity. Each particle's movement is influenced by its local best known position, but it is also guided toward the best known positions in the search-space, which are updated as better positions are found by other particles. This is expected to move the swarm toward the best solutions.
+PSO is a biologically inspired computational method that optimizes a problem by iteratively trying to improve a candidate solution with regard to a given measure of quality. It solves a problem by having a population of candidate solutions (particles) and moving these particles around in the search-space according to simple mathematical formulas over the particle's position and velocity. Each particle's movement is influenced by its local best known position, but it is also guided toward the best known positions in the search-space, which are updated as better positions are found by other particles. This is expected to move the swarm toward the best solutions. [[Wikipedia](https://en.wikipedia.org/wiki/Particle_swarm_optimization)]
 
 ### how can I use Particle Swarm Optimization to optimize Machine Learning model hyperparameters
 
-Each particle is a Machine Learning model and the measure of quality is the model loss function, that is a pre-defined metric, such as mean squared error (MSE) and accuracy (ACC), for regression and classification problems, respectively.
+Each particle is a Machine Learning model instance and the measure of quality is the model loss function, that is a pre-defined metric, such as mean squared error (MSE) and accuracy (ACC), for regression and classification problems, respectively.
 
-### accepted models:
+### accepted models
 
-You can use pso2 to optimize the hyperparameters of the following sklearn-based models:
+You can use pso2 to optimize the hyperparameters of the following **sklearn-based** models:
 
 | Model | Hyperparameters |
 | ------ | ------ |
