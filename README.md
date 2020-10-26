@@ -83,3 +83,10 @@ You can access the best model hyperparameters using the **best_params_** attribu
 ```python
 print(opt.best_params_)
 ```
+
+# TO DO
+
+- Extends to another supervised models
+- Returns the best model object as a key of best_params_ attribute
+- Implements a checkpoint step to save intermediate PSO state
+- Implements parallel optimization in evaluate, updates velocity and position steps
