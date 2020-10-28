@@ -23,7 +23,7 @@ You can use pso2 to optimize the hyperparameters of the following **sklearn-base
 
 To use pso2, it is necessary to encapsulate some parameters in a dictionary. The parameters are: chosen model, model hyperparameters and its boundaries, loss function, training and test data, PSO parameters, number of particles, and number of iterations.
 
-Let's demonstrate an example of Gradient Boosting Regression hyperparameters optiimization:
+Let's demonstrate an example of Gradient Boosting regression hyperparameters optiimization:
 
 ```python
 from sklearn.ensemble import GradientBoostingRegressor
@@ -88,7 +88,11 @@ print(opt.best_params_)
 # to do
 
 - [ ] Fix verbose mode
-- [ ] Extends to another supervised models
 - [ ] Returns the best model object as a key of best_params_ attribute
 - [ ] Implements a checkpoint step to save intermediate PSO state
 - [ ] Implements parallel optimization in evaluate, updates velocity and position steps
+- Models to add:
+    - [ ] Support Vector Machines
+    - [ ] Decision Tree
+    - [ ] Random Forest
+    - [ ] AdaBoost
