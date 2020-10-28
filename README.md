@@ -16,7 +16,8 @@ You can use pso2 to optimize the hyperparameters of the following **sklearn-base
 
 | Model | Hyperparameters |
 | ------ | ------ |
-| GradientBoostingRegressor | n_estimators, max_depth, learning_rate |
+| ensemble.GradientBoostingRegressor | n_estimators, max_depth, learning_rate, tol |
+| svm.SVR | C, tol |
 
 ### how to use pso2
 
