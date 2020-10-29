@@ -1,18 +1,19 @@
 import numpy as np
 
-from sklearn.ensemble import GradientBoostingRegressor
-from sklearn.svm import SVR
+from sklearn.ensemble import GradientBoostingRegressor, GradientBoostingClassifier
+from sklearn.svm import SVR, SVC
 
 
 # Base class of models
 class Model:
-    def __init__(self, params, X_train, X_test, y_train, y_test, loss_func):
+    def __init__(self, params, X_train, X_test, y_train, y_test, loss_func, model):
         self.params = params
         self.X_train = X_train
         self.X_test = X_test
         self.y_train = y_train
         self.y_test = y_test
         self.loss_func = loss_func
+        self.model = model
 
     # Method to get hyperparam type
     def get_types(self, param):
@@ -38,7 +39,7 @@ class Model:
         pass
 
 
-class GBR(Model):
+class GradientBoosting(Model):
     def get_types(self, param):
         types = {
             'n_estimators': np.int64,
@@ -68,8 +69,8 @@ class GBR(Model):
         for i, key in enumerate(self.params.keys()):
             params_dict[key] = self.get_types(key)(params[i])
 
-        model = GradientBoostingRegressor(**params_dict)
-        model.fit(self.X_train, self.y_train.values.ravel())
+        model = self.model(**params_dict)
+        model.fit(self.X_train, self.y_train)
 
         y_pred = model.predict(self.X_test)
         loss = self.loss_func(self.y_test, y_pred)
@@ -77,7 +78,7 @@ class GBR(Model):
         return loss
 
 
-class SVMR(Model):
+class SupportVectorMachines(Model):
     def get_types(self, param):
         types = {
             'C': np.float64,
@@ -103,8 +104,8 @@ class SVMR(Model):
         for i, key in enumerate(self.params.keys()):
             params_dict[key] = self.get_types(key)(params[i])
 
-        model = SVR(**params_dict)
-        model.fit(self.X_train, self.y_train.values.ravel())
+        model = self.model(**params_dict)
+        model.fit(self.X_train, self.y_train)
 
         y_pred = model.predict(self.X_test)
         loss = self.loss_func(self.y_test, y_pred)
@@ -114,8 +115,12 @@ class SVMR(Model):
 
 def set_model(m, params, X_train, X_test, y_train, y_test, loss_func):
     if isinstance(m, GradientBoostingRegressor):
-        model = GBR(params, X_train, X_test, y_train, y_test, loss_func)
+        model = GradientBoosting(params, X_train, X_test, y_train, y_test, loss_func, GradientBoostingRegressor)
+    elif isinstance(m, GradientBoostingClassifier):
+        model = GradientBoosting(params, X_train, X_test, y_train, y_test, loss_func, GradientBoostingClassifier)
     elif isinstance(m, SVR):
-        model = SVMR(params, X_train, X_test, y_train, y_test, loss_func)
+        model = SupportVectorMachines(params, X_train, X_test, y_train, y_test, loss_func, SVR)
+    elif isinstance(m, SVC):
+        model = SupportVectorMachines(params, X_train, X_test, y_train, y_test, loss_func, SVC)
 
     return model

@@ -17,7 +17,9 @@ You can use pso2 to optimize the hyperparameters of the following **sklearn-base
 | Model | Hyperparameters |
 | ------ | ------ |
 | ensemble.GradientBoostingRegressor | n_estimators, max_depth, learning_rate, tol |
+| ensemble.GradientBoostingClassifier | n_estimators, max_depth, learning_rate, tol |
 | svm.SVR | C, tol |
+| svm.SVC | C, tol |
 
 ### how to use pso2
 
@@ -91,6 +93,7 @@ print(opt.best_params_)
 - [ ] Returns the best model object as a key of best_params_ attribute
 - [ ] Implements a checkpoint step to save intermediate PSO state
 - [ ] Implements parallel optimization in evaluate, updates velocity and position steps
+- [ ] Add docstring
 - Models to add:
     - [ ] Support Vector Machines
     - [ ] Decision Tree
