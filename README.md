@@ -91,11 +91,12 @@ print(opt.best_params_)
 
 - [ ] Fix verbose mode
 - [ ] Returns the best model object as a key of best_params_ attribute
+- [ ] Add docstring
 - [ ] Implements a checkpoint step to save intermediate PSO state
 - [ ] Implements parallel optimization in evaluate, updates velocity and position steps
-- [ ] Add docstring
 - Models to add:
-    - [ ] Support Vector Machines
-    - [ ] Decision Tree
+    - [X] Gradient Boosting
+    - [X] Support Vector Machines
     - [ ] Random Forest
     - [ ] AdaBoost
+    - [ ] Decision Tree
