@@ -36,7 +36,18 @@ class Model:
 
     # Train a model and returns some loss function value
     def fit(self, params):
-        pass
+        params_dict = {}
+
+        for i, key in enumerate(self.params.keys()):
+            params_dict[key] = self.get_types(key)(params[i])
+
+        model = self.model(**params_dict)
+        model.fit(self.X_train, self.y_train)
+
+        y_pred = model.predict(self.X_test)
+        loss = self.loss_func(self.y_test, y_pred)
+
+        return loss
 
 
 class GradientBoosting(Model):
@@ -63,20 +74,6 @@ class GradientBoosting(Model):
 
         return params[key]
 
-    def fit(self, params):
-        params_dict = {}
-
-        for i, key in enumerate(self.params.keys()):
-            params_dict[key] = self.get_types(key)(params[i])
-
-        model = self.model(**params_dict)
-        model.fit(self.X_train, self.y_train)
-
-        y_pred = model.predict(self.X_test)
-        loss = self.loss_func(self.y_test, y_pred)
-
-        return loss
-
 
 class SupportVectorMachines(Model):
     def get_types(self, param):
@@ -97,20 +94,6 @@ class SupportVectorMachines(Model):
         }
 
         return params[key]
-
-    def fit(self, params):
-        params_dict = {}
-
-        for i, key in enumerate(self.params.keys()):
-            params_dict[key] = self.get_types(key)(params[i])
-
-        model = self.model(**params_dict)
-        model.fit(self.X_train, self.y_train)
-
-        y_pred = model.predict(self.X_test)
-        loss = self.loss_func(self.y_test, y_pred)
-
-        return loss
 
 
 def set_model(m, params, X_train, X_test, y_train, y_test, loss_func):
