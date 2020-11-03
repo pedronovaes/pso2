@@ -14,6 +14,7 @@ class Particle:
         self.pos_best_i = []                    # Best position individual
         self.err_best_i = -1                    # Best error individual
         self.err_i = -1                         # Error individual
+        self.model_i = None                     # Model individual
         self.num_dimensions = len(parameters)   # Num of problem dimensions
 
         # Generating initial velocities randomly
@@ -29,7 +30,7 @@ class Particle:
 
     # Evaluate current fitness
     def evaluate(self, model):
-        self.err_i = model.fit(self.position_i)
+        self.err_i, self.model_i = model.fit(self.position_i)
 
         # Check to see if the current position is an individual best
         if self.err_i < self.err_best_i or self.err_best_i == -1:
@@ -80,6 +81,7 @@ class PSO:
 
         self.err_best_g = -1        # Best error for group
         self.pos_best_g = []        # Best position for group
+        self.model_best_g = None    # Best model for group
         self.best_params_ = {}
 
         # Machine Learning model
@@ -122,6 +124,7 @@ class PSO:
                 if self.swarm[j].err_i < self.err_best_g or self.err_best_g == -1:
                     self.pos_best_g = copy.deepcopy(self.swarm[j].position_i)
                     self.err_best_g = self.swarm[j].err_i
+                    self.model_best_g = copy.deepcopy(self.swarm[j].model_i)
 
             # Cycle through swarm and update velocities and positions
             for j in range(0, self.n_pop):
@@ -139,6 +142,8 @@ class PSO:
             print('total time: {:.2f}s'.format(end - init))
 
         self.best_params_ = self.format_output()
+
+        return self.model_best_g
 
     def format_output(self):
         output = {}

@@ -47,7 +47,7 @@ class Model:
         y_pred = model.predict(self.X_test)
         loss = self.loss_func(self.y_test, y_pred)
 
-        return loss
+        return loss, model
 
 
 class GradientBoosting(Model):

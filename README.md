@@ -78,9 +78,10 @@ And instantiate a PSO object:
 from pso2.optimizer import PSO
 
 opt = PSO(**pso_params)
-opt.optimize()
+best_model = opt.optimize()
 ```
 
+best_model is the machine learning model that obtained the best metrics for the input data. With this object, you can perform another predicts and/or deploy in a server.
 You can access the best model hyperparameters using the **best_params_** attribute:
 
 ```python
@@ -89,8 +90,8 @@ print(opt.best_params_)
 
 # to do
 
+- [X] Returns the best model object
 - [ ] Fix verbose mode
-- [ ] Returns the best model object as a key of best_params_ attribute
 - [ ] Add docstring
 - [ ] Implements a checkpoint step to save intermediate PSO state
 - [ ] Implements parallel optimization in evaluate, updates velocity and position steps
