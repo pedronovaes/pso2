@@ -1,6 +1,6 @@
 import numpy as np
 
-from sklearn.ensemble import GradientBoostingRegressor, GradientBoostingClassifier
+from sklearn.ensemble import GradientBoostingRegressor, GradientBoostingClassifier, RandomForestRegressor
 from sklearn.svm import SVR, SVC
 
 
@@ -75,6 +75,27 @@ class GradientBoosting(Model):
         return params[key]
 
 
+class RandomForest(Model):
+    def get_types(self, param):
+        types = {
+            'n_estimators': np.int64,
+            'max_depth': np.int64,
+        }
+
+        return types[param]
+
+    def get_params(self, key, value):
+        low = value[0]
+        high = value[1]
+
+        params = {
+            'n_estimators': np.random.randint(low, high + 1),
+            'max_depth': np.random.randint(low, high + 1),
+        }
+
+        return params[key]
+
+
 class SupportVectorMachines(Model):
     def get_types(self, param):
         types = {
@@ -105,5 +126,7 @@ def set_model(m, params, X_train, X_test, y_train, y_test, loss_func):
         model = SupportVectorMachines(params, X_train, X_test, y_train, y_test, loss_func, SVR)
     elif isinstance(m, SVC):
         model = SupportVectorMachines(params, X_train, X_test, y_train, y_test, loss_func, SVC)
+    elif isinstance(m, RandomForestRegressor):
+        model = RandomForest(params, X_train, X_test, y_train, y_test, loss_func, GradientBoostingRegressor)
 
     return model

@@ -18,6 +18,7 @@ You can use pso2 to optimize the hyperparameters of the following **sklearn-base
 | ------ | ------ |
 | ensemble.GradientBoostingRegressor | n_estimators, max_depth, learning_rate, tol |
 | ensemble.GradientBoostingClassifier | n_estimators, max_depth, learning_rate, tol |
+| ensemble.RandomForestRegressor | n_estimators, max_depth |
 | svm.SVR | C, tol |
 | svm.SVC | C, tol |
 
@@ -98,6 +99,6 @@ print(opt.best_params_)
 - Models to add:
     - [X] Gradient Boosting
     - [X] Support Vector Machines
-    - [ ] Random Forest
+    - [X] Random Forest
     - [ ] AdaBoost
     - [ ] Decision Tree
